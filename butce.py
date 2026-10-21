@@ -37,15 +37,24 @@ def rapor_goster():
     plt.pie(kategori_toplamlari, labels=kategori_toplamlari.index, autopct="%1.1f%%")
     plt.title("Kategorilere Göre Harcamalar")
     plt.show()
+def harcamalari_listele():
+    if not os.path.isfile(DOSYA_ADI):
+        print("Henüz kayıtlı harcama yok.")
+        return
+
+    df = pd.read_csv(DOSYA_ADI)
+    print("\n--- TÜM HARCAMALAR ---")
+    print(df.to_string())
     
 
 while True :
     print("\n--- BÜTÇE ASİSTANI")
     print("1- Yeni Harcama Ekle")
     print("2- Rapor Gör")
-    print("3- Çıkış")
+    print("3- Harcamaları Listele")
+    print("4- Çıkış")
     secim = input ("Lütfen bir işlem seçin")
-    if secim == "3" :
+    if secim == "4" :
         print("Sistem kapatılıyor. Kayıtlar güvende!")
         break
     elif secim == "1":
@@ -71,7 +80,8 @@ while True :
 
     elif secim == "2":
         rapor_goster()
-        
+    elif secim == "3":
+        harcamalari_listele()
     else:
-        print("Hata: Sadece 1, 2 veya 3 tuşlayın!")
+        print("Hata: Sadece 1,2,3 veya 4 tuşlayın!")
     
