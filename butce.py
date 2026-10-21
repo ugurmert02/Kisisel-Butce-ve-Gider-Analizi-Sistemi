@@ -45,16 +45,48 @@ def harcamalari_listele():
     df = pd.read_csv(DOSYA_ADI)
     print("\n--- TÜM HARCAMALAR ---")
     print(df.to_string())
-    
+
+def harcama_sil():
+    if not os.path.isfile(DOSYA_ADI):
+        print("Henüz kayıtlı harcama yok.")
+        return
+
+    df = pd.read_csv(DOSYA_ADI)
+    if df.empty:
+        print("Henüz kayıtlı harcama yok.")
+        return
+
+    harcamalari_listele()
+
+    try:
+        numara = int(input("\nSilinecek harcamanın numarası: "))
+    except ValueError:
+        print("HATA: Lütfen sadece rakam girin!")
+        return
+
+    if numara not in df.index:
+        print("HATA: Bu numarada bir harcama yok!")
+        return
+
+    silinecek = df.loc[numara]
+    onay = input(f"'{silinecek['Aciklama']}' ({silinecek['Tutar(TL)']} TL) silinsin mi? (e/h): ")
+
+    if onay.lower() == "e":
+        df = df.drop(numara)
+        df.to_csv(DOSYA_ADI, index=False, encoding="utf-8")
+        print("[BAŞARILI] Harcama silindi.")
+    else:
+        print("Silme iptal edildi.")
 
 while True :
     print("\n--- BÜTÇE ASİSTANI")
     print("1- Yeni Harcama Ekle")
     print("2- Rapor Gör")
     print("3- Harcamaları Listele")
-    print("4- Çıkış")
+    print("4- Harcama Sil")
+    print("5- Çıkış")
     secim = input ("Lütfen bir işlem seçin")
-    if secim == "4" :
+    if secim == "5" :
         print("Sistem kapatılıyor. Kayıtlar güvende!")
         break
     elif secim == "1":
@@ -82,6 +114,8 @@ while True :
         rapor_goster()
     elif secim == "3":
         harcamalari_listele()
+    elif secim == "4":
+        harcama_sil()
     else:
-        print("Hata: Sadece 1,2,3 veya 4 tuşlayın!")
+        print("Hata: Sadece 1,2,3,4 veya 5 tuşlayın!")
     
